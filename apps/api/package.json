@@ -7,7 +7,7 @@
     "build": "npx tsc && npx tsc-alias",
     "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
     "serve": "cross-env NODE_ENV=production npm run build && node dist/index.js",
-    "check-types": "tsc --noEmit"
+    "check-types": "npx tsc --noEmit"
   },
   "keywords": [],
   "author": "",

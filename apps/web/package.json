@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "serve": "next start",
+    "lint": "next lint",
+    "check-types": "npx tsc --noEmit"
   },
   "dependencies": {
     "next": "14.2.15",

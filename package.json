@@ -3,10 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "prepare": "husky"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "serve": "turbo run serve",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "prepare": "husky",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
