@@ -3,3 +3,8 @@ node_modules
 
 # turbo
 .turbo
+
+# environment variables
+.env
+/apps/api/.env
+/apps/web/.env
