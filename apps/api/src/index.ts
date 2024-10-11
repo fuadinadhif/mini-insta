@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/v1', (req, res) => {
+app.get('/api/v1', (req, res) => {
   return res.status(200).json({ message: 'Welcome to Mini Insta API v1!' });
 });
 
