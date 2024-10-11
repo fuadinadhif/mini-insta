@@ -16,7 +16,7 @@ app.get('/api/v1', (req, res) => {
   return res.status(200).json({ message: 'Welcome to Mini Insta API v1!' });
 });
 
-app.use('/v1/posts', postRoutes);
+app.use('/api/v1/posts', postRoutes);
 
 const PORT = process.env.PORT || 8000;
 const availablePort = await getAvailablePort(PORT as number);
