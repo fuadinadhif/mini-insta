@@ -1,4 +1,4 @@
-import { Request, response, Response } from 'express';
+import { Request, Response } from 'express';
 
 import prisma from '@/lib/prisma.js';
 import { uploadFile, getFileUrl, deleteFile } from '@/lib/aws-s3.js';
