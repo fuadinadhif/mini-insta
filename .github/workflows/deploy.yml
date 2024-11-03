@@ -2,19 +2,20 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Deploy to EC2
-      env:
-        PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
-        HOST: ${{ secrets.EC2_HOST }}
-        USER: ${{ secrets.EC2_USERNAME }}
-      run: |
-        echo "$PRIVATE_KEY" > mini-insta-key-pair.pem && chmod 600 mini-insta-key-pair.pem
-        ssh -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem ${USER}@${HOST}
-        echo "I am in!"
+      - uses: actions/checkout@v2
+      - name: Deploy to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USERNAME }}
+        run: |
+          echo "$PRIVATE_KEY" > mini-insta-key-pair.pem && chmod 600 mini-insta-key-pair.pem
+          ssh -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem ${USER}@${HOST}
+          echo "I am in!"
+          touch FACT.md
