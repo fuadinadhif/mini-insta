@@ -18,6 +18,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate Prisma client
+        run: |
+          cd apps/api
+          npx prisma generate
+
       - name: Build applications
         run: npm run build
         # This will build both apps through turborepo
