@@ -15,7 +15,7 @@ app.use(cors());
 app.get('/api/v1', (req, res) => {
   return res
     .status(200)
-    .json({ message: 'Hai! Hai! Welcome to Mini Insta API v1!' });
+    .json({ message: 'Ready! Welcome to Mini Insta API v1!' });
 });
 
 // app.use('/api/v1/posts', postRoutes);

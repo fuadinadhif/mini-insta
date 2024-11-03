@@ -7,24 +7,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: ${{ matrix.node-version }}
 
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Generate Prisma Client
+      - name: Build Project
         run: |
-          cd apps/api
-          npx prisma generate
-
-      - name: Build Apps
-        run: npm run build
+          npm ci
+          npx prisma generate --schema=./apps/api/prisma/schema.prisma
+          npm run build
 
       - name: Copy Files to Server
         uses: appleboy/scp-action@master
@@ -32,6 +31,17 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          port: 22
           source: './apps/web/.next, ./apps/web/*, ./apps/web/.*, ./apps/api, ./package*.json, ./turbo.json, ./.husky'
           target: '~/mini-insta'
+
+      - name: Run App
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            cd ~/mini-insta
+            pm2 start ecosystem.config.cjs
