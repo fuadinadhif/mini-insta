@@ -15,33 +15,23 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Generate Prisma client
+      - name: Generate Prisma Client
         run: |
           cd apps/api
           npx prisma generate
 
-      - name: Build applications
+      - name: Build Apps
         run: npm run build
-        # This will build both apps through turborepo
 
-      - name: Deploy to the server
-        env:
-          PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
-          HOST: ${{ secrets.EC2_HOST }}
-          USER: ${{ secrets.EC2_USERNAME }}
-        run: |
-          echo "$PRIVATE_KEY" > mini-insta-key-pair.pem && chmod 600 mini-insta-key-pair.pem
-
-          # Copy API build files
-          scp -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem -r ./apps/api/dist/* ${USER}@${HOST}:~/mini-insta/apps/api/dist/
-
-          # Copy Next.js build files
-          scp -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem -r ./apps/web/.next/* ${USER}@${HOST}:~/mini-insta/apps/web/.next/
-
-          # Just restart the PM2 processes
-          ssh -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem ${USER}@${HOST} '
-            pm2 restart all
-          '
+      - name: Copy Files to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          source: './apps/web/.next, ./apps/web/*, ./apps/web/.*, ./apps/api, ./package*.json, ./turbo.json, ./.husky'
+          target: '~/mini-insta'
