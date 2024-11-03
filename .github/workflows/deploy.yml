@@ -16,6 +16,7 @@ jobs:
           USER: ${{ secrets.EC2_USERNAME }}
         run: |
           echo "$PRIVATE_KEY" > mini-insta-key-pair.pem && chmod 600 mini-insta-key-pair.pem
-          ssh -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem ${USER}@${HOST}
-          echo "I am in!"
-          touch FACT.md
+          ssh -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem ${USER}@${HOST} '
+            echo "I am in!"
+            touch FACT.md
+          '
