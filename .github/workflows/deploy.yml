@@ -9,14 +9,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy to EC2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build applications
+        run: npm run build
+        # This will build both apps through turborepo
+
+      - name: Deploy to the server
         env:
           PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
           HOST: ${{ secrets.EC2_HOST }}
           USER: ${{ secrets.EC2_USERNAME }}
         run: |
           echo "$PRIVATE_KEY" > mini-insta-key-pair.pem && chmod 600 mini-insta-key-pair.pem
+
+          # Copy API build files
+          scp -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem -r ./apps/api/dist/* ${USER}@${HOST}:~/mini-insta/apps/api/dist/
+
+          # Copy Next.js build files
+          scp -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem -r ./apps/web/.next/* ${USER}@${HOST}:~/mini-insta/apps/web/.next/
+
+          # Just restart the PM2 processes
           ssh -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem ${USER}@${HOST} '
-            echo "I am in!"
-            touch FACT.md
+            pm2 restart api
+            pm2 restart web
           '
