@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 
 import { getAvailablePort } from '@/utils/get-available-port.js';
-import postRoutes from '@/routes/post-route.js';
+// import postRoutes from '@/routes/post-route.js';
 
 dotenv.config();
 
@@ -15,10 +15,10 @@ app.use(cors());
 app.get('/api/v1', (req, res) => {
   return res
     .status(200)
-    .json({ message: 'Hai! Welcome to Mini Insta API v1!' });
+    .json({ message: 'Hai! Hai! Welcome to Mini Insta API v1!' });
 });
 
-app.use('/api/v1/posts', postRoutes);
+// app.use('/api/v1/posts', postRoutes);
 
 const PORT = process.env.PORT || 8000;
 const availablePort = await getAvailablePort(PORT as number);

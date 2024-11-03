@@ -43,6 +43,5 @@ jobs:
 
           # Just restart the PM2 processes
           ssh -o StrictHostKeyChecking=no -i mini-insta-key-pair.pem ${USER}@${HOST} '
-            pm2 restart api
-            pm2 restart web
+            pm2 restart all
           '
